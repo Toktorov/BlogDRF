@@ -45,3 +45,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User 
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined', 'phone_number', 'profile_image')

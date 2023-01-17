@@ -42,9 +42,13 @@ INSTALLED_APPS = [
     #django rest
     'rest_framework',
 
+    #docs
+    'drf_yasg',
+
     #apps
-    'apps.posts',
+    'apps.categories',
     'apps.users',
+    'apps.posts',
 ]
 
 MIDDLEWARE = [
