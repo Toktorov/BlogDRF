@@ -86,3 +86,7 @@ class PostLike(models.Model):
 
     def __str__(self):
         return f"{self.post}, {self.user}"
+
+    class Meta:
+        verbose_name = "Лайки к посту"
+        verbose_name_plural = "Лайки к постам"
