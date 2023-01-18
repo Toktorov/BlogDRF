@@ -3,7 +3,7 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateMode
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from apps.posts.models import Post, PostComment, PostImages, PostLike
-from apps.posts.serializers import PostSerializer, PostDetailSerializer, PostCreateSerializer
+from apps.posts.serializers import PostSerializer, PostDetailSerializer, PostCreateSerializer, PostLikeSerializer, PostCommentSerializer, PostImagesSerializer
 from apps.posts.permissions import PostPermissions
 
 # Create your views here.
@@ -25,8 +25,28 @@ class PostAPIViewSet(GenericViewSet, ListModelMixin,
             return (IsAuthenticated(), PostPermissions())
         return (AllowAny(), )
 
-    def get_queryset(self):
-        return Post.objects.filter(user = self.request.user)
-
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
+
+class LikeAPIViewSet(GenericViewSet, ListModelMixin,
+                        CreateModelMixin, DestroyModelMixin):
+    queryset = PostLike.objects.all()
+    serializer_class = PostLikeSerializer
+    permission_classes = (PostPermissions, )
+
+    def perform_create(self, serializer):
+        return serializer.save(user = self.request.user)
+
+class CommentAPIViewSet(GenericViewSet, CreateModelMixin,
+                            DestroyModelMixin):
+    queryset = PostComment.objects.all()
+    serializer_class = PostCommentSerializer
+    permission_classes = (PostPermissions, )
+
+    def perform_create(self, serializer):
+        return serializer.save(user = self.request.user)
+
+class PostImagesAPIViewSet(GenericViewSet, CreateModelMixin,
+                            DestroyModelMixin):
+    queryset = PostImages.objects.all()
+    serializer_class = PostImagesSerializer

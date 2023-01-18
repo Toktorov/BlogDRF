@@ -46,6 +46,10 @@ class PostImages(models.Model):
         verbose_name_plural = "Фотография к постам"
 
 class PostComment(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        related_name="post_comment_user"
+    )
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE,
         related_name="post_comments",

@@ -7,13 +7,23 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post 
         fields = "__all__"
 
-class LikeSerilaizer(serializers.ModelSerializer):
+class PostLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostLike
         fields = "__all__"
 
+class PostCommentSerializer(serializers.BaseSerializer):
+    class Meta:
+        model = PostComment
+        fields = "__all__"
+
+class PostImagesSerializer(serializers.BaseSerializer):
+    class Meta:
+        model = PostImages
+        fields = "__all__"
+
 class PostDetailSerializer(serializers.ModelSerializer):
-    post_likes = LikeSerilaizer(read_only = True, many = True)
+    post_likes = PostLikeSerializer(read_only = True, many = True)
     count_likes = serializers.SerializerMethodField(read_only = True)
     class Meta:
         model = Post
