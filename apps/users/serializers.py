@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.users.models import User 
+from apps.posts.serializers import PostSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -47,6 +48,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return user
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    user_posts = PostSerializer(read_only = True, many = True)
     class Meta:
         model = User 
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined', 'phone_number', 'profile_image')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined', 'phone_number', 'profile_image', 'user_posts')

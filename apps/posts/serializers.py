@@ -21,3 +21,12 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     def get_count_likes(self, instance):
         return instance.post_likes.all().count()
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('title', 'description')
+
+    def create(self):
+        post = Post.objects.create(user = self.context['request'].user, title = self.initial_data['title'], description = self.initial_data['description'])
+        return post
