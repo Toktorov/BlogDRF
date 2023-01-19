@@ -22,3 +22,21 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+
+class Follower(models.Model):
+    from_user = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        related_name="follower_from_user"
+    )
+    to_user = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        related_name="follower_to_user"
+    )
+
+    def __str__(self):
+        return f"From {self.from_user} - to {self.to_user}"
+
+    class Meta:
+        verbose_name = "Подписчик"
+        verbose_name = "Подписчики"
+        unique_together = (('from_user', 'to_user'),)
