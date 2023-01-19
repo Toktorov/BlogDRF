@@ -1,9 +1,10 @@
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 
 from apps.posts.models import Post, PostComment, PostImages, PostLike
-from apps.posts.serializers import PostSerializer, PostDetailSerializer, PostCreateSerializer, PostLikeSerializer, PostCommentSerializer, PostImagesSerializer
+from apps.posts.serializers import PostSerializer, PostDetailSerializer, PostLikeSerializer, PostCommentSerializer, PostImagesSerializer
 from apps.posts.permissions import PostPermissions
 
 # Create your views here.
@@ -11,13 +12,10 @@ class PostAPIViewSet(GenericViewSet, ListModelMixin,
                         RetrieveModelMixin, CreateModelMixin, 
                         UpdateModelMixin, DestroyModelMixin):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
 
     def get_serializer_class(self):
         if self.action in ('retrieve', 'update', 'partial_update',):
             return PostDetailSerializer
-        elif self.action in ('create'):
-            return PostCreateSerializer
         return PostSerializer
 
     def get_permissions(self):
@@ -55,3 +53,12 @@ class PostImagesAPIViewSet(GenericViewSet, CreateModelMixin,
                             DestroyModelMixin):
     queryset = PostImages.objects.all()
     serializer_class = PostImagesSerializer
+    permission_classes = (IsAuthenticated, )
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        post = Post.objects.get(id = serializer.initial_data.get("post"))
+        if serializer.is_valid() and post.user == request.user:
+            serializer.save()
+            return Response({"OK" : "Успешно создано"})
+        return Response({"Error" : "Вы не можете добавить фотографию"})

@@ -36,8 +36,3 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
     def get_count_comments(self, instance):
         return instance.post_comments.all().count()
-
-class PostCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = ('title', 'description')

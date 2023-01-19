@@ -13,6 +13,7 @@ class User(AbstractUser):
     )
     age = models.PositiveSmallIntegerField(
         verbose_name="Возраст",
+        blank = True, null = True
     )
 
     def __str__(self) -> str:

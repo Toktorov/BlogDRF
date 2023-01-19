@@ -7,6 +7,6 @@ router = DefaultRouter()
 router.register(prefix='post', viewset=PostAPIViewSet)
 router.register(prefix='like', viewset=LikeAPIViewSet)
 router.register(prefix='comment', viewset=CommentAPIViewSet)
-# router.register(prefix='post_images', viewset=PostImagesAPIViewSet)
+router.register(prefix='post_images', viewset=PostImagesAPIViewSet)
 
 urlpatterns = router.urls

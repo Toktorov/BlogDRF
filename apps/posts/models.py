@@ -3,6 +3,19 @@ from django.db import models
 from apps.users.models import User
 
 # Create your models here.
+class Tag(models.Model):
+    title = models.CharField(
+        max_length=255,
+        verbose_name="Название"
+    )
+
+    def __str__(self):
+        return self.title 
+
+    class Meta:
+        verbose_name = "Тег"
+        verbose_name_plural = "Теги"
+
 class Post(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE,
@@ -15,6 +28,10 @@ class Post(models.Model):
     )
     description = models.TextField(
         verbose_name="Описание"
+    )
+    tag = models.ManyToManyField(
+        Tag, related_name="posts_tag",
+        blank = True
     )
     created = models.DateTimeField(
         auto_now_add=True
