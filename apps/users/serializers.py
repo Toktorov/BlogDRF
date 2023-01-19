@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.users.models import User 
+from apps.users.models import User, UserFollower
 from apps.posts.serializers import PostSerializer
 
 
@@ -47,8 +47,28 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+class UserFollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFollower
+        fields = "__all__"
+
 class UserDetailSerializer(serializers.ModelSerializer):
     user_posts = PostSerializer(read_only = True, many = True)
+    count_posts = serializers.SerializerMethodField(read_only = True)
+    subscribers = UserFollowerSerializer(read_only = True, many = True)
+    count_subscribers = serializers.SerializerMethodField(read_only = True)
+    subscriptions = UserFollowerSerializer(read_only = True, many = True)
+    count_subscriptions = serializers.SerializerMethodField(read_only = True)
+
     class Meta:
         model = User 
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined', 'phone_number', 'profile_image', 'user_posts')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined', 'phone_number', 'profile_image', 'user_posts', 'count_posts', 'subscribers', 'count_subscribers', 'subscriptions', 'count_subscriptions')
+
+    def get_count_posts(self, instance):
+        return instance.user_posts.all().count()
+
+    def get_count_subscribers(self, instance):
+        return instance.subscribers.all().count()
+
+    def get_count_subscriptions(self, instance):
+        return instance.subscriptions.all().count()

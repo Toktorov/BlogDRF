@@ -2,13 +2,11 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from apps.users.views import UsersAPIViewSet
+from apps.users.views import UsersAPIViewSet, UserFollowerAPIView
 
 router = DefaultRouter()
-router.register(
-    prefix='',
-    viewset=UsersAPIViewSet
-)
+router.register(prefix='users', viewset=UsersAPIViewSet)
+router.register(prefix='follower', viewset=UserFollowerAPIView)
 
 urlpatterns = [
     #auth

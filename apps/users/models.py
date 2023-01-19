@@ -23,14 +23,14 @@ class User(AbstractUser):
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
-class Follower(models.Model):
+class UserFollower(models.Model):
     from_user = models.ForeignKey(
         User, on_delete=models.CASCADE,
-        related_name="follower_from_user"
+        related_name="subscriptions"
     )
     to_user = models.ForeignKey(
         User, on_delete=models.CASCADE,
-        related_name="follower_to_user"
+        related_name="subscribers"
     )
 
     def __str__(self):
