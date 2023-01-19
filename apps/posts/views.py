@@ -14,16 +14,21 @@ class PostAPIViewSet(GenericViewSet, ListModelMixin,
     serializer_class = PostSerializer
 
     def get_serializer_class(self):
-        if self.action in ("retrieve", "update", "partial_update",):
+        if self.action in ('retrieve', 'update', 'partial_update',):
             return PostDetailSerializer
         elif self.action in ('create'):
             return PostCreateSerializer
         return PostSerializer
 
     def get_permissions(self):
-        if self.action in ('update', 'partial_update', 'destroy'):
+        if self.action in ('list', 'update', 'partial_update', 'destroy'):
             return (IsAuthenticated(), PostPermissions())
         return (AllowAny(), )
+
+    def get_queryset(self):
+        if self.action in ('list', ):
+            return Post.objects.filter(user = self.request.user)
+        return Post.objects.all()
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
@@ -32,7 +37,7 @@ class LikeAPIViewSet(GenericViewSet, ListModelMixin,
                         CreateModelMixin, DestroyModelMixin):
     queryset = PostLike.objects.all()
     serializer_class = PostLikeSerializer
-    permission_classes = (PostPermissions, )
+    permission_classes = (IsAuthenticated, )
 
     def perform_create(self, serializer):
         return serializer.save(user = self.request.user)
@@ -41,7 +46,7 @@ class CommentAPIViewSet(GenericViewSet, CreateModelMixin,
                             DestroyModelMixin):
     queryset = PostComment.objects.all()
     serializer_class = PostCommentSerializer
-    permission_classes = (PostPermissions, )
+    permission_classes = (IsAuthenticated, )
 
     def perform_create(self, serializer):
         return serializer.save(user = self.request.user)
