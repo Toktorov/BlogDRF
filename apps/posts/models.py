@@ -112,7 +112,6 @@ class PostLike(models.Model):
         verbose_name = "Лайки к посту"
         verbose_name_plural = "Лайки к постам"
 
-
 class PostFavotite(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE,

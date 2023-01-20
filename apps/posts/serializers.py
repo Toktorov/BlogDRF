@@ -28,12 +28,16 @@ class PostFavotiteSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class PostDetailSerializer(serializers.ModelSerializer):
+    #post - посты
     post_likes = PostLikeSerializer(read_only = True, many = True)
     count_likes = serializers.SerializerMethodField(read_only = True)
+    #comments - комментарии
     post_comments = PostCommentSerializer(read_only = True, many = True)
     count_comments = serializers.SerializerMethodField(read_only = True)
+    #post favorites - избранные
     post_favotites = PostFavotiteSerializer(read_only = True, many = True)
     count_post_favotites = serializers.SerializerMethodField(read_only = True)
+
     class Meta:
         model = Post
         fields = ('id', 'title', 'description', 

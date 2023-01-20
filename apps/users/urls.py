@@ -9,7 +9,6 @@ router.register(prefix='users', viewset=UsersAPIViewSet)
 router.register(prefix='follower', viewset=UserFollowerAPIView)
 
 urlpatterns = [
-    #auth
     path('login/', TokenObtainPairView.as_view(), name='api_login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='api_token_refresh'),
 ]
