@@ -111,3 +111,23 @@ class PostLike(models.Model):
     class Meta:
         verbose_name = "Лайки к посту"
         verbose_name_plural = "Лайки к постам"
+
+
+class PostFavotite(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        related_name="favorites",
+        verbose_name="Пользователь"
+    )
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE,
+        related_name="post_favotites",
+        verbose_name="Пост"
+    )
+
+    def __str__(self):
+        return f"{self.user}, {self.post}"
+
+    class Meta:
+        verbose_name = "Избранное"
+        verbose_name_plural = "Избранные"

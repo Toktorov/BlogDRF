@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.users.models import User, UserFollower
-from apps.posts.serializers import PostSerializer
+from apps.posts.serializers import PostSerializer, PostFavotiteSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,16 +53,27 @@ class UserFollowerSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    #posts - посты пользователя
     user_posts = PostSerializer(read_only = True, many = True)
     count_posts = serializers.SerializerMethodField(read_only = True)
+    #subscribers - подписчики
     subscribers = UserFollowerSerializer(read_only = True, many = True)
     count_subscribers = serializers.SerializerMethodField(read_only = True)
+    #subscriptions - подписки
     subscriptions = UserFollowerSerializer(read_only = True, many = True)
     count_subscriptions = serializers.SerializerMethodField(read_only = True)
+    #favorites - избранные пользователя
+    favorites = PostFavotiteSerializer(read_only = True, many = True)
+    count_favorites = serializers.SerializerMethodField(read_only = True)
 
     class Meta:
         model = User 
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'date_joined', 'phone_number', 'profile_image', 'user_posts', 'count_posts', 'subscribers', 'count_subscribers', 'subscriptions', 'count_subscriptions')
+        fields = ('id', 'username', 'first_name', 
+            'last_name', 'email', 'date_joined', 
+            'phone_number', 'profile_image', 'user_posts', 
+            'count_posts', 'subscribers', 'count_subscribers', 
+            'subscriptions', 'count_subscriptions', 'favorites', 'count_favorites'
+        )
 
     def get_count_posts(self, instance):
         return instance.user_posts.all().count()
@@ -72,3 +83,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     def get_count_subscriptions(self, instance):
         return instance.subscriptions.all().count()
+
+    def get_count_favorites(self, instance):
+        return instance.favorites.all().count()

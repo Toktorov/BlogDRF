@@ -38,5 +38,5 @@ class UserFollower(models.Model):
 
     class Meta:
         verbose_name = "Подписчик"
-        verbose_name = "Подписчики"
+        verbose_name_plural = "Подписчики"
         unique_together = (('from_user', 'to_user'),)

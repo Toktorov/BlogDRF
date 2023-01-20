@@ -3,8 +3,8 @@ from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateMode
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
-from apps.posts.models import Post, PostComment, PostImages, PostLike
-from apps.posts.serializers import PostSerializer, PostDetailSerializer, PostLikeSerializer, PostCommentSerializer, PostImagesSerializer
+from apps.posts.models import Post, PostComment, PostImages, PostLike, PostFavotite
+from apps.posts.serializers import PostSerializer, PostDetailSerializer, PostLikeSerializer, PostCommentSerializer, PostImagesSerializer, PostFavotiteSerializer
 from apps.posts.permissions import PostPermissions
 
 # Create your views here.
@@ -62,3 +62,12 @@ class PostImagesAPIViewSet(GenericViewSet, CreateModelMixin,
             serializer.save()
             return Response({"OK" : "Успешно создано"})
         return Response({"Error" : "Вы не можете добавить фотографию"})
+
+class PostFavotiteAPIView(GenericViewSet, CreateModelMixin,
+                            DestroyModelMixin):
+    queryset = PostFavotite.objects.all()
+    serializer_class = PostFavotiteSerializer
+    permission_classes = (IsAuthenticated, )
+
+    def perform_create(self, serializer):
+        return serializer.save(user = self.request.user)
